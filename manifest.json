@@ -1,0 +1,7 @@
+{
+  "short_name": "flickr-api-app",
+  "name": "Simple app for consuming the Flickr pulic photo api",
+  "icons": [],
+  "start_url": "./index.html",
+  "display": "standalone"
+}
