@@ -31,20 +31,23 @@ const photosReducer = (state = defaultState, action) => {
 }
 
 const defaultSelectedUserState = {
-    user: null
+    user: null,
+    photos: null
 };
 
 const selectedUserReducer = (state = defaultSelectedUserState, action) => {
     switch(action.type) {
         case 'FETCH_USER_CANCELLED':
-            return { user: null, fetching: false, error: false };
+            return { user: null, fetching: false, error: false, photos: null };
         case 'FETCH_USER_STARTED':
-            return { user: null, fetching: true, error: false };
+            return { ...state, user: null, fetching: true, error: false, photos: null };
         case 'FETCH_USER_COMPLETE':
-            return { user: action.payload, fetching: false, error: false };
+            return {...state, user: action.payload, fetching: false, error: false };
             break;
         case 'FETCH_USER_ERROR':
-            return { user: null, fetching: false, error: true };
+            return { ...state, user: null, fetching: false, error: true, photos: null };
+        case 'FETCH_USER_PHOTOS_COMPLETE':
+            return {...state, photos: action.payload };
         default:
             return state;
             break;
@@ -80,6 +83,14 @@ const selectUser = user_id => {
                 dispatch({ type: 'FETCH_USER_ERROR' });
             } else {
                 dispatch({ type: 'FETCH_USER_COMPLETE', payload: data.person });
+            }
+        });
+        jsonp(`https://api.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&api_key=636233aa890a436890fce8798558aae9&user_id=${user_id}&format=json`, {
+            param: "jsoncallback"
+        }, function(err, data) {
+            if(err == null) {
+                let limitedPhotos = data.photos.photo.slice(0, 5);
+                dispatch({ type: 'FETCH_USER_PHOTOS_COMPLETE', payload: limitedPhotos });
             }
         });
     });
@@ -193,7 +204,18 @@ class App extends Component {
     getThumbnailUrl() {
         return `https://farm1.staticflickr.com/${this.props.selectedUser.iconserver}/buddyicons/${this.props.selectedUser.id}.jpg?1200501238#12037949754@N01`;
     }
+    photos() {
+        if(this.props.selectedUserPhotos != null) {
+            return(this.props.selectedUserPhotos.map(photo => {
+                const imgSrc = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
+                return (<img src={imgSrc} />);
+            }));
+        } else {
+            return;
+        }
+    }
     getSelectedUserPopup() {
+        console.log(this.props.selectedUser);
         if(this.props.selectedUser == null) {
             return (<div></div>)
         } else {
@@ -206,6 +228,7 @@ class App extends Component {
                         realname={this.props.selectedUser.realname._content}
                         location={this.props.selectedUser.location._content}
                         description={this.props.selectedUser.description._content} />
+                    {this.photos()}
                 </div>
             </div>);
         }
@@ -234,7 +257,8 @@ const appMapStateToProps = state => {
     return {
         fetching: state.photos.fetching,
         error: state.photos.error,
-        selectedUser: state.selectedUser.user
+        selectedUser: state.selectedUser.user,
+        selectedUserPhotos: state.selectedUser.photos
     }
 }
 
