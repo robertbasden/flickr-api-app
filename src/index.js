@@ -5,8 +5,8 @@ import { Provider, connect } from 'react-redux';
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 import registerServiceWorker from './registerServiceWorker';
-import jsonp from 'jsonp'
 
+import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
 import './App.css';
 
 const defaultState = {
@@ -61,39 +61,37 @@ const combinedReducer = combineReducers({ photos: photosReducer, selectedUser: s
 const store = createStore(combinedReducer, middleware);
 
 store.dispatch(dispatch => {
+
     dispatch({ type: 'FETCH_STARTED' });
-    jsonp("https://api.flickr.com/services/feeds/photos_public.gne?format=json", {
-        param: "jsoncallback"
-    }, function(err, data) {
-        if(err != null) {
-            dispatch({ type: 'DATA_ERROR' });
-        } else {
-            dispatch({ type: 'DATA_FETCHED', payload: data.items });
-        }
+
+    getPublicPhotoFeed(function(data) {
+        dispatch({ type: 'DATA_FETCHED', payload: data.items });
+    }, function(error) {
+        dispatch({ type: 'DATA_ERROR' });
     });
+
 });
 
 const selectUser = user_id => {
+
     store.dispatch(dispatch => {
+
         dispatch({ type: 'FETCH_USER_STARTED' });
-        jsonp(`https://api.flickr.com/services/rest/?method=flickr.people.getInfo&api_key=636233aa890a436890fce8798558aae9&user_id=${user_id}&format=json`, {
-            param: "jsoncallback"
-        }, function(err, data) {
-            if(err != null) {
-                dispatch({ type: 'FETCH_USER_ERROR' });
-            } else {
-                dispatch({ type: 'FETCH_USER_COMPLETE', payload: data.person });
-            }
+
+        getInfo(user_id, function(data) {
+            dispatch({ type: 'FETCH_USER_COMPLETE', payload: data.person });
+        }, function(error) {
+            dispatch({ type: 'FETCH_USER_ERROR' });
         });
-        jsonp(`https://api.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&api_key=636233aa890a436890fce8798558aae9&user_id=${user_id}&format=json`, {
-            param: "jsoncallback"
-        }, function(err, data) {
-            if(err == null) {
-                let limitedPhotos = data.photos.photo.slice(0, 5);
-                dispatch({ type: 'FETCH_USER_PHOTOS_COMPLETE', payload: limitedPhotos });
-            }
+
+        getPublicPhotos(user_id, function(data) {
+            dispatch({ type: 'FETCH_USER_PHOTOS_COMPLETE', payload: data.photos.photo.slice(0, 5) });
+        }, function(error) {
+            //Do nothing
         });
+
     });
+
 }
 
 const cancelSelectUser = () => {
