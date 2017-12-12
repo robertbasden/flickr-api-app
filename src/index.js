@@ -219,15 +219,21 @@ class App extends Component {
         if(this.props.selectedUser == null) {
             return (<div></div>)
         } else {
+            const user = {
+                username: (this.props.selectedUser.username == null) ? "" : this.props.selectedUser.username._content,
+                realname: (this.props.selectedUser.realname == null) ? "" : this.props.selectedUser.realname._content,
+                location: (this.props.selectedUser.location == null) ? "" : this.props.selectedUser.location._content,
+                description: (this.props.selectedUser.description == null) ? "" : this.props.selectedUser.description._content
+            };
             return (<div>
                 <div className="user-details-blocker" onClick={this.cancel}></div>
                 <div className="user-details">
                     <UserDetails
                         thumbNail={this.getThumbnailUrl()}
-                        username={this.props.selectedUser.username._content}
-                        realname={this.props.selectedUser.realname._content}
-                        location={this.props.selectedUser.location._content}
-                        description={this.props.selectedUser.description._content} />
+                        username={user.username}
+                        realname={user.realname}
+                        location={user.location}
+                        description={user.description} />
                     {this.photos()}
                 </div>
             </div>);
