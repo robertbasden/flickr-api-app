@@ -9,7 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
 import './App.css';
 
-import UserDetails from './components/UserDetails/UserDetails.js'; 
+import UserDetails from './components/UserDetails/UserDetails.js';
+import PhotoTiles from './components/PhotoTiles/PhotoTiles.js';
 
 const defaultState = {
     photos: [],
@@ -100,88 +101,18 @@ const cancelSelectUser = () => {
     store.dispatch({ type: 'FETCH_USER_CANCELLED' });
 }
 
-
-class Tile extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-    backgroundStyle(image) {
-        const style = { backgroundImage: "url(" + image + ")" };
-        return style;
-    }
-    title(title) {
-        if (title.length > 0) {
-            return title;
-        } else {
-            return "Untitled";
-        }
-    }
-    handleClick(e) {
-        e.preventDefault();
-        selectUser(this.props.author_id);
-    }
-    author(author, author_id) {
-        const authorName = author.match( /"(.*?)"/ )[1];
-        return (<a href={'https://www.flickr.com/photos/' + author_id} onClick={this.handleClick} target="_blank">{authorName}</a>);
-    }
-    tags(tags) {
-        if(tags.length > 0) {
-            return "Tags: " + tags.trim().split(" ").join(", ");
-        } else {
-            return "";
-        }
-    }
-    render() {
-        return (
-            <div className="tile">
-                <div className="image">
-                    <a href={this.props.link} target="_blank" style={this.backgroundStyle(this.props.imageUrl)}></a>
-                </div>
-                <div className="title">
-                    <a href={this.props.link} target="_blank">{this.title(this.props.title)}</a> by {this.author(this.props.author, this.props.author_id)}
-                </div>
-                <div className="tags">{this.tags(this.props.tags)}</div>
-            </div>
-        );
-    }
-}
-
-class PhotoTiles extends Component {
-    getPhotoKey(photo) {
-        return photo.author_id + "_" + photo.media.m;
-    }
-    render() {
-        const photoTiles = this.props.photos.map(photo => {
-            return (<Tile
-                key={this.getPhotoKey(photo)}
-                imageUrl={photo.media.m}
-                link={photo.link}
-                title={photo.title}
-                author_id={photo.author_id}
-                author={photo.author}
-                description={photo.description}
-                tags={photo.tags} />);
-        })
-        return (
-            <div className="tiles">{photoTiles}</div>
-        );
-    }
-}
-
-const mapStateToProps = state => {
-    return {
-        photos: state.photos.data
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {};
-}
-
 const ConnectedPhotoTiles = connect(
-  mapStateToProps,
-  mapDispatchToProps
+    state => {
+        return {
+            photos: state.photos.data
+        }
+    }, dispatch => {
+        return {
+            userClicked: userId => {
+                selectUser(userId);
+            }
+        };
+    }
 )(PhotoTiles)
 
 class App extends Component {
