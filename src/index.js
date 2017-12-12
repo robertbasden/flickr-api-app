@@ -10,6 +10,7 @@ import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.j
 import './App.css';
 
 import UserDetails from './components/UserDetails/UserDetails.js';
+import UserPhotos from './components/UserPhotos/UserPhotos.js';
 import PhotoTiles from './components/PhotoTiles/PhotoTiles.js';
 
 const defaultState = {
@@ -120,14 +121,11 @@ class App extends Component {
         cancelSelectUser();
     }
     getThumbnailUrl() {
-        return `https://farm1.staticflickr.com/${this.props.selectedUser.iconserver}/buddyicons/${this.props.selectedUser.id}.jpg?1200501238#12037949754@N01`;
+        return
     }
     photos() {
         if(this.props.selectedUserPhotos != null) {
-            return(this.props.selectedUserPhotos.map(photo => {
-                const imgSrc = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
-                return (<img src={imgSrc} />);
-            }));
+            return (<UserPhotos photos={this.props.selectedUserPhotos} />);
         } else {
             return;
         }
