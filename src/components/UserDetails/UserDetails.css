@@ -1,0 +1,10 @@
+.user-details .user-details__description {
+  margin-bottom: 2rem; }
+  .user-details .user-details__description > div {
+    margin-bottom: 0.4rem; }
+
+.user-details .user-details__description__username {
+  font-size: 1.5rem; }
+
+.user-details .user-details__thumbnail {
+  max-width: 100px; }

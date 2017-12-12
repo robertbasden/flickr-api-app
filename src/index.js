@@ -9,6 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
 import './App.css';
 
+import UserDetails from './components/UserDetails/UserDetails.js'; 
+
 const defaultState = {
     photos: [],
     fetching: false,
@@ -98,19 +100,6 @@ const cancelSelectUser = () => {
     store.dispatch({ type: 'FETCH_USER_CANCELLED' });
 }
 
-class UserDetails extends Component {
-    render() {
-        return (
-            <div>
-                <img src={this.props.thumbNail} />
-                <div>{this.props.username}</div>
-                <div>{this.props.realname}</div>
-                <div>{this.props.location}</div>
-                <div>{this.props.description}</div>
-            </div>
-        );
-    }
-}
 
 class Tile extends Component {
     constructor(props) {
