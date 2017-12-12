@@ -6,5 +6,6 @@
 .user-details .user-details__description__username {
   font-size: 1.5rem; }
 
-.user-details .user-details__thumbnail {
-  max-width: 100px; }
+.user-details .user-details__thumbnail > img {
+  max-width: 100px;
+  border: 1px solid #CCC; }
