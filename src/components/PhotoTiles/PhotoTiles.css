@@ -1,0 +1,34 @@
+.photo-tiles .photo-tiles__tile {
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #F1F1F1;
+  overflow: hidden;
+  box-shadow: 0 0 5px #F1F1F1; }
+  .photo-tiles .photo-tiles__tile .photo-tiles__tile__image,
+  .photo-tiles .photo-tiles__tile .photo-tiles__tile__title,
+  .photo-tiles .photo-tiles__tile .photo-tiles__tile__description {
+    margin-bottom: 0.5rem; }
+  .photo-tiles .photo-tiles__tile .photo-tiles__tile__image {
+    width: 100%;
+    height: 150px; }
+    .photo-tiles .photo-tiles__tile .photo-tiles__tile__image > a {
+      display: block;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+      height: 100%; }
+  .photo-tiles .photo-tiles__tile .photo-tiles__tile__tags {
+    font-size: 0.8rem; }
+
+@media screen and (min-width: 600px) {
+  .photo-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row; }
+  .photo-tiles__tile {
+    width: calc(50% - 2rem); } }
+
+@media screen and (min-width: 1000px) {
+  .photo-tiles__tile {
+    width: calc(25% - 2rem); } }

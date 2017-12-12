@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './PhotoTiles.css';
+
 class Tile extends Component {
     constructor(props) {
         super(props);
@@ -33,14 +35,14 @@ class Tile extends Component {
     }
     render() {
         return (
-            <div className="tile">
-                <div className="image">
+            <div className="photo-tiles__tile">
+                <div className="photo-tiles__tile__image">
                     <a href={this.props.link} target="_blank" style={this.backgroundStyle(this.props.imageUrl)}></a>
                 </div>
-                <div className="title">
+                <div className="photo-tiles__tile__title">
                     <a href={this.props.link} target="_blank">{this.title(this.props.title)}</a> by {this.author(this.props.author, this.props.authorId)}
                 </div>
-                <div className="tags">{this.tags(this.props.tags)}</div>
+                <div className="photo-tiles__tile__tags">{this.tags(this.props.tags)}</div>
             </div>
         );
     }
@@ -64,7 +66,7 @@ export default class PhotoTiles extends Component {
                 userClicked={this.props.userClicked} />);
         })
         return (
-            <div className="tiles">{photoTiles}</div>
+            <div className="photo-tiles">{photoTiles}</div>
         );
     }
 }
