@@ -143,14 +143,16 @@ class App extends Component {
             };
             return (<div>
                 <div className="user-details-blocker" onClick={this.cancel}></div>
-                <div className="user-details">
-                    <UserDetails
-                        thumbNail={this.getThumbnailUrl()}
-                        username={user.username}
-                        realname={user.realname}
-                        location={user.location}
-                        description={user.description} />
-                    {this.photos()}
+                <div className="user-details-popup">
+                    <div className="user-details-content">
+                        <UserDetails
+                            thumbNail={this.getThumbnailUrl()}
+                            username={user.username}
+                            realname={user.realname}
+                            location={user.location}
+                            description={user.description} />
+                        {this.photos()}
+                    </div>
                 </div>
             </div>);
         }
