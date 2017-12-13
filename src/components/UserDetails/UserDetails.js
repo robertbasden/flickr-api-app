@@ -15,9 +15,6 @@ export default class UserDetails extends Component {
                     <div>{this.props.location}</div>
                     <div dangerouslySetInnerHTML={this.descriptionMarkup(this.props.description)}></div>
                 </div>
-                <div className="user-details__thumbnail">
-                    <img src={this.props.thumbNail} />
-                </div>
             </div>
         );
     }

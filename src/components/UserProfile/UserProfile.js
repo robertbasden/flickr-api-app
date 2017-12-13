@@ -19,7 +19,6 @@ export default class UserProfile extends Component {
             };
 
             details = (<UserDetails
-                thumbNail=""
                 username={user.username}
                 realname={user.realname}
                 location={user.location}
