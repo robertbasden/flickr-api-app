@@ -9,8 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
 import './App.css';
 
-import UserDetails from './components/UserDetails/UserDetails.js';
-import UserPhotos from './components/UserPhotos/UserPhotos.js';
+import UserProfile from './components/UserProfile/UserProfile.js';
 import PhotoTiles from './components/PhotoTiles/PhotoTiles.js';
 
 const defaultState = {
@@ -35,28 +34,36 @@ const photosReducer = (state = defaultState, action) => {
 }
 
 const defaultSelectedUserState = {
-    user: null,
+    id: null,
+    details: null,
     photos: null
 };
 
 const selectedUserReducer = (state = defaultSelectedUserState, action) => {
+
     switch(action.type) {
-        case 'FETCH_USER_CANCELLED':
-            return { user: null, fetching: false, error: false, photos: null };
-        case 'FETCH_USER_STARTED':
-            return { ...state, user: null, fetching: true, error: false, photos: null };
-        case 'FETCH_USER_COMPLETE':
-            return {...state, user: action.payload, fetching: false, error: false };
-            break;
-        case 'FETCH_USER_ERROR':
-            return { ...state, user: null, fetching: false, error: true, photos: null };
-        case 'FETCH_USER_PHOTOS_COMPLETE':
-            return {...state, photos: action.payload };
+
+        case 'SET_SELECTED_USER':
+            return { id: action.payload, details: null, photos: null };
+
+        case 'CLEAR_SELECTED_USER':
+            return defaultSelectedUserState;
+
+        case 'SELECTED_USER_DETAILS_FETCHED':
+            return { ...state, details: action.payload };
+
+        case 'SELECTED_USER_DETAILS_ERROR':
+            return { ...state, details: null };
+
+        case 'SELECTED_USER_PHOTOS_FETCHED':
+            return { ...state, photos: action.payload };
+
         default:
             return state;
-            break;
-    }
-}
+
+    };
+
+};
 
 
 
@@ -80,16 +87,16 @@ const selectUser = user_id => {
 
     store.dispatch(dispatch => {
 
-        dispatch({ type: 'FETCH_USER_STARTED' });
+        dispatch({ type: 'SET_SELECTED_USER', payload: user_id });
 
         getInfo(user_id, function(data) {
-            dispatch({ type: 'FETCH_USER_COMPLETE', payload: data.person });
+            dispatch({ type: 'SELECTED_USER_DETAILS_FETCHED', payload: data.person });
         }, function(error) {
-            dispatch({ type: 'FETCH_USER_ERROR' });
+            dispatch({ type: 'SELECTED_USER_DETAILS_ERROR' });
         });
 
         getPublicPhotos(user_id, function(data) {
-            dispatch({ type: 'FETCH_USER_PHOTOS_COMPLETE', payload: data.photos.photo.slice(0, 5) });
+            dispatch({ type: 'SELECTED_USER_PHOTOS_FETCHED', payload: data.photos.photo.slice(0, 5) });
         }, function(error) {
             //Do nothing
         });
@@ -99,7 +106,7 @@ const selectUser = user_id => {
 }
 
 const cancelSelectUser = () => {
-    store.dispatch({ type: 'FETCH_USER_CANCELLED' });
+    store.dispatch({ type: 'CLEAR_SELECTED_USER' });
 }
 
 const ConnectedPhotoTiles = connect(
@@ -116,45 +123,28 @@ const ConnectedPhotoTiles = connect(
     }
 )(PhotoTiles)
 
-class App extends Component {
-    cancel() {
-        cancelSelectUser();
-    }
-    getThumbnailUrl() {
-        return
-    }
-    photos() {
-        if(this.props.selectedUserPhotos != null) {
-            return (<UserPhotos photos={this.props.selectedUserPhotos} />);
-        } else {
-            return;
+const ConnectedUserProfile = connect(
+    state => {
+        return {
+            userDetails: state.selectedUser.details,
+            userPhotos: state.selectedUser.photos
         }
+    } , dispatch => {
+        return {};
     }
+)(UserProfile);
+
+class App extends Component {
     getSelectedUserPopup() {
-        console.log(this.props.selectedUser);
-        if(this.props.selectedUser == null) {
-            return (<div></div>)
-        } else {
-            const user = {
-                username: (this.props.selectedUser.username == null) ? "" : this.props.selectedUser.username._content,
-                realname: (this.props.selectedUser.realname == null) ? "" : this.props.selectedUser.realname._content,
-                location: (this.props.selectedUser.location == null) ? "" : this.props.selectedUser.location._content,
-                description: (this.props.selectedUser.description == null) ? "" : this.props.selectedUser.description._content
-            };
+        if(this.props.userIsSelected) {
             return (<div>
-                <div className="user-details-blocker" onClick={this.cancel}></div>
-                <div className="user-details-popup">
-                    <div className="user-details-content">
-                        <UserDetails
-                            thumbNail={this.getThumbnailUrl()}
-                            username={user.username}
-                            realname={user.realname}
-                            location={user.location}
-                            description={user.description} />
-                        {this.photos()}
-                    </div>
+                <div className="user-profile-popup-blocker" onClick={this.props.cancelSelectedUser}></div>
+                <div className="user-profile-popup">
+                    <ConnectedUserProfile />
                 </div>
             </div>);
+        } else {
+            return null;
         }
     }
     getContent() {
@@ -177,22 +167,20 @@ class App extends Component {
     }
 }
 
-const appMapStateToProps = state => {
-    return {
-        fetching: state.photos.fetching,
-        error: state.photos.error,
-        selectedUser: state.selectedUser.user,
-        selectedUserPhotos: state.selectedUser.photos
-    }
-}
-
-const appMapDispatchToProps = dispatch => {
-    return {}
-}
-
 const ConnectedApp = connect(
-  appMapStateToProps,
-  appMapDispatchToProps
+    state => {
+        return {
+            fetching: state.photos.fetching,
+            error: state.photos.error,
+            userIsSelected: state.selectedUser.id != null
+        }
+    }, dispatch => {
+        return {
+            cancelSelectedUser: () => {
+                cancelSelectUser();
+            }
+        }
+    }
 )(App)
 
 ReactDOM.render(

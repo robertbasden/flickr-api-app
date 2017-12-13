@@ -29,7 +29,7 @@ body {
     padding: 1rem;
 }
 
-.user-details-popup {
+.user-profile-popup {
     position: fixed;
     top: 100px;
     left: 100px;
@@ -37,19 +37,8 @@ body {
     bottom: 100px;
     background: #FFF;
     padding: 1rem;
-    .user-details-content {
-        display: flex;
-        align-items: flex-start;
-    }
-    .user-details {
-        margin-right: 1rem;
-        width: 400px;
-    }
-    .user_photos {
-        flex: 1;
-    }
 }
-.user-details-blocker {
+.user-profile-popup-blocker {
     position: fixed;
     top: 0px;
     left: 0px;

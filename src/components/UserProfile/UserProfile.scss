@@ -1,0 +1,11 @@
+.user-profile {
+    display: flex;
+    align-items: flex-start;
+}
+.user-profile__details {
+    margin-right: 1rem;
+    width: 400px;
+}
+.user-profile__photos {
+    flex: 1;
+}
