@@ -17,7 +17,8 @@
       background-repeat: no-repeat;
       background-position: center;
       width: 100%;
-      height: 100%; }
+      height: 100%;
+      text-indent: -9999px; }
   .photo-tiles .photo-tiles__tile .photo-tiles__tile__tags {
     font-size: 0.8rem; }
 

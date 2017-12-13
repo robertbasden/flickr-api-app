@@ -37,7 +37,9 @@ class Tile extends Component {
         return (
             <div className="photo-tiles__tile">
                 <div className="photo-tiles__tile__image">
-                    <a href={this.props.link} target="_blank" style={this.backgroundStyle(this.props.imageUrl)}></a>
+                    <a href={this.props.link} target="_blank" style={this.backgroundStyle(this.props.imageUrl)}>
+                        {this.props.title}
+                    </a>
                 </div>
                 <div className="photo-tiles__tile__title">
                     <a href={this.props.link} target="_blank">{this.title(this.props.title)}</a> by {this.author(this.props.author, this.props.authorId)}
