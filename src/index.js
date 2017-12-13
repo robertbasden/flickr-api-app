@@ -6,7 +6,7 @@ import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 import registerServiceWorker from './registerServiceWorker';
 
-import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
+import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './services/flickr.js';
 
 import photosReducer from './reducers/public-photos.js';
 import selectedUserReducer from './reducers/selected-user.js';

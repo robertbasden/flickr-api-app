@@ -1,5 +1,5 @@
 import jsonp from "jsonp"
-import { flickrApiKey } from "./config.js"
+import { flickrApiKey } from "../config.js"
 
 const getPublicPhotoFeed = (complete, error) => {
     jsonp("https://api.flickr.com/services/feeds/photos_public.gne?format=json", {
