@@ -7,63 +7,14 @@ import thunk from 'redux-thunk'
 import registerServiceWorker from './registerServiceWorker';
 
 import { getPublicPhotoFeed, getInfo, getPublicPhotos } from './flickr-service.js';
-import './App.css';
+
+import photosReducer from './reducers/public-photos.js';
+import selectedUserReducer from './reducers/selected-user.js';
 
 import UserProfile from './components/UserProfile/UserProfile.js';
 import PhotoTiles from './components/PhotoTiles/PhotoTiles.js';
 
-const defaultState = {
-    photos: [],
-    fetching: false,
-    error: false
-};
-
-const photosReducer = (state = defaultState, action) => {
-    switch(action.type) {
-        case 'FETCH_PHOTOS_STARTED':
-            return { data: [], fetching: true, error: true }
-        case 'FETCH_PHOTOS_COMPLETE':
-            return { data: action.payload, fetching: false, error: false };
-        case 'FETCH_PHOTOS_ERROR':
-            return { data: [], fetching: false, error: true }
-        default:
-            return state;
-    }
-}
-
-const defaultSelectedUserState = {
-    id: null,
-    details: null,
-    photos: null
-};
-
-const selectedUserReducer = (state = defaultSelectedUserState, action) => {
-
-    switch(action.type) {
-
-        case 'SET_SELECTED_USER':
-            return { id: action.payload, details: null, photos: null };
-
-        case 'CLEAR_SELECTED_USER':
-            return defaultSelectedUserState;
-
-        case 'SELECTED_USER_DETAILS_FETCHED':
-            return { ...state, details: action.payload };
-
-        case 'SELECTED_USER_DETAILS_ERROR':
-            return { ...state, details: null };
-
-        case 'SELECTED_USER_PHOTOS_FETCHED':
-            return { ...state, photos: action.payload };
-
-        default:
-            return state;
-
-    };
-
-};
-
-
+import './App.css';
 
 const middleware = applyMiddleware(thunk, logger);
 const combinedReducer = combineReducers({ photos: photosReducer, selectedUser: selectedUserReducer });
