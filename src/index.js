@@ -24,12 +24,10 @@ const photosReducer = (state = defaultState, action) => {
             return { data: [], fetching: true, error: true }
         case 'FETCH_PHOTOS_COMPLETE':
             return { data: action.payload, fetching: false, error: false };
-            break;
         case 'FETCH_PHOTOS_ERROR':
             return { data: [], fetching: false, error: true }
         default:
             return state;
-            break;
     }
 }
 
