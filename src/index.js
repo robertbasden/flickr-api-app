@@ -61,9 +61,7 @@ const cancelSelectUser = () => {
 const ConnectedPhotoTiles = connect(
     state => {
         return {
-            photos: state.photos.data,
-            fetching: state.photos.fetching,
-            error: state.photos.error,
+            request: state.photos.request
         }
     }, dispatch => {
         return {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
+import PhotosRequest from '../../data/photos-request.js'
 import './PhotoTiles.css';
+
+
 
 class Tile extends Component {
     constructor(props) {
@@ -55,30 +57,37 @@ export default class PhotoTiles extends Component {
         return photo.author_id + "_" + photo.media.m;
     }
     render() {
-        if(this.props.fetching) {
-            return (<div className="photo-tiles__loading">Loading...</div>);
-        } else if(this.props.error) {
-            return (<div className="photo-tiles__error">There was a problem fetching photos from Flickr!</div>);
-        } else {
 
-            const photoTiles = this.props.photos.map(photo => {
-                return (<Tile
-                    key={this.getPhotoKey(photo)}
-                    imageUrl={photo.media.m}
-                    link={photo.link}
-                    title={photo.title}
-                    authorId={photo.author_id}
-                    author={photo.author}
-                    description={photo.description}
-                    tags={photo.tags}
-                    userClicked={this.props.userClicked} />);
-            })
+        const that = this;
+        return this.props.request.match({
+            Complete(data) {
 
-            return (
-                <div className="photo-tiles">{photoTiles}</div>
-            );
+                const photoTiles = data.map(photo => {
 
-        }
+                    return (<Tile
+                        key={that.getPhotoKey(photo)}
+                        imageUrl={photo.media.m}
+                        link={photo.link}
+                        title={photo.title}
+                        authorId={photo.author_id}
+                        author={photo.author}
+                        description={photo.description}
+                        tags={photo.tags}
+                        userClicked={that.props.userClicked} />);
+                });
+
+                return (
+                    <div className="photo-tiles">{photoTiles}</div>
+                );
+
+            },
+            Error(error) {
+                return (<div className="photo-tiles__error">There was a problem fetching photos from Flickr!</div>);
+            },
+            _() {
+                return (<div className="photo-tiles__loading">Loading...</div>);
+            }
+        });
 
     }
 }

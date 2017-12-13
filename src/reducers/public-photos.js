@@ -1,18 +1,18 @@
-const defaultState = {
-    photos: [],
-    fetching: false,
-    error: false
-};
+import PhotosRequest from '../data/photos-request.js'
+
+const defaultState = { request: PhotosRequest.NotStarted() };
 
 export default (state = defaultState, action) => {
+
     switch(action.type) {
         case 'FETCH_PHOTOS_STARTED':
-            return { data: [], fetching: true, error: true }
+            return { request: PhotosRequest.Fetching() };
         case 'FETCH_PHOTOS_COMPLETE':
-            return { data: action.payload, fetching: false, error: false };
+            return { request: PhotosRequest.Complete(action.payload) };
         case 'FETCH_PHOTOS_ERROR':
-            return { data: [], fetching: false, error: true }
+            return { request: PhotosRequest.Error('There was a problem fetching photos') };
         default:
             return state;
     }
-}
+
+};

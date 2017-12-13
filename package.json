@@ -10,7 +10,8 @@
     "react-scripts": "1.0.17",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "tagged-union": "^1.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
