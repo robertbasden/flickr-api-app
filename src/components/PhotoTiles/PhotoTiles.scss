@@ -1,5 +1,14 @@
+$error: hsl(348, 100%, 61%);
 
 .photo-tiles {
+    .photo-tiles__loading {
+        padding: 1rem;
+    }
+    .photo-tiles__error {
+        padding: 1rem;
+        border: 1px solid $error;
+        color: $error;
+    }
     .photo-tiles__tile {
         padding: 1rem;
         margin: 1rem;

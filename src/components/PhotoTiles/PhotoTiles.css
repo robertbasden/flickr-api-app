@@ -1,3 +1,11 @@
+.photo-tiles .photo-tiles__loading {
+  padding: 1rem; }
+
+.photo-tiles .photo-tiles__error {
+  padding: 1rem;
+  border: 1px solid #ff3860;
+  color: #ff3860; }
+
 .photo-tiles .photo-tiles__tile {
   padding: 1rem;
   margin: 1rem;

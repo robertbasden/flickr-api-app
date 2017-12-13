@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-$error: hsl(348, 100%, 61%);
-
 html {
     box-sizing: border-box;
 }
@@ -16,16 +14,6 @@ body {
 }
 
 .app {
-    padding: 1rem;
-}
-
-.error {
-    padding: 1rem;
-    border: 1px solid $error;
-    color: $error;
-}
-
-.loading {
     padding: 1rem;
 }
 

@@ -61,7 +61,9 @@ const cancelSelectUser = () => {
 const ConnectedPhotoTiles = connect(
     state => {
         return {
-            photos: state.photos.data
+            photos: state.photos.data,
+            fetching: state.photos.fetching,
+            error: state.photos.error,
         }
     }, dispatch => {
         return {
@@ -96,21 +98,11 @@ class App extends Component {
             return null;
         }
     }
-    getContent() {
-        if(this.props.fetching) {
-            return (<div className="loading">Loading...</div>);
-        } else if (this.props.error) {
-            return (<div className="error">There was a problem fetching photos from Flickr!</div>);
-        } else {
-            return (<ConnectedPhotoTiles />);
-        }
-    }
     render() {
-
         return (
             <div className="app">
                 {this.getSelectedUserPopup()}
-                {this.getContent()}
+                <ConnectedPhotoTiles />
             </div>
         );
     }

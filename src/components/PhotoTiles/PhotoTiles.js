@@ -55,20 +55,30 @@ export default class PhotoTiles extends Component {
         return photo.author_id + "_" + photo.media.m;
     }
     render() {
-        const photoTiles = this.props.photos.map(photo => {
-            return (<Tile
-                key={this.getPhotoKey(photo)}
-                imageUrl={photo.media.m}
-                link={photo.link}
-                title={photo.title}
-                authorId={photo.author_id}
-                author={photo.author}
-                description={photo.description}
-                tags={photo.tags}
-                userClicked={this.props.userClicked} />);
-        })
-        return (
-            <div className="photo-tiles">{photoTiles}</div>
-        );
+        if(this.props.fetching) {
+            return (<div className="photo-tiles__loading">Loading...</div>);
+        } else if(this.props.error) {
+            return (<div className="photo-tiles__error">There was a problem fetching photos from Flickr!</div>);
+        } else {
+
+            const photoTiles = this.props.photos.map(photo => {
+                return (<Tile
+                    key={this.getPhotoKey(photo)}
+                    imageUrl={photo.media.m}
+                    link={photo.link}
+                    title={photo.title}
+                    authorId={photo.author_id}
+                    author={photo.author}
+                    description={photo.description}
+                    tags={photo.tags}
+                    userClicked={this.props.userClicked} />);
+            })
+
+            return (
+                <div className="photo-tiles">{photoTiles}</div>
+            );
+
+        }
+
     }
 }
