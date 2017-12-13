@@ -20,12 +20,12 @@ const defaultState = {
 
 const photosReducer = (state = defaultState, action) => {
     switch(action.type) {
-        case 'FETCH_STARTED':
+        case 'FETCH_PHOTOS_STARTED':
             return { data: [], fetching: true, error: true }
-        case 'DATA_FETCHED':
+        case 'FETCH_PHOTOS_COMPLETE':
             return { data: action.payload, fetching: false, error: false };
             break;
-        case 'DATA_ERROR':
+        case 'FETCH_PHOTOS_ERROR':
             return { data: [], fetching: false, error: true }
         default:
             return state;
@@ -73,12 +73,12 @@ const store = createStore(combinedReducer, middleware);
 
 store.dispatch(dispatch => {
 
-    dispatch({ type: 'FETCH_STARTED' });
+    dispatch({ type: 'FETCH_PHOTOS_STARTED' });
 
     getPublicPhotoFeed(function(data) {
-        dispatch({ type: 'DATA_FETCHED', payload: data.items });
+        dispatch({ type: 'FETCH_PHOTOS_COMPLETE', payload: data.items });
     }, function(error) {
-        dispatch({ type: 'DATA_ERROR' });
+        dispatch({ type: 'FETCH_PHOTOS_ERROR' });
     });
 
 });
